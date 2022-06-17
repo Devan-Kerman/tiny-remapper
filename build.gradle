@@ -9,7 +9,7 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-version = '0.8.5'
+version = '333.0.8.5'
 
 def ENV = System.getenv()
 version = version + (ENV.GITHUB_ACTIONS ? "" : "+local")
@@ -84,12 +84,13 @@ publishing {
 	}
 
 	repositories {
-		if (ENV.MAVEN_URL) {
-			maven {
-				url ENV.MAVEN_URL
+		maven {
+			def mavenUrl = project.hasProperty('maven_url') ? project.property('maven_url') : ""
+			url mavenUrl
+			if (mavenUrl.startsWith("http")) {
 				credentials {
-					username ENV.MAVEN_USERNAME
-					password ENV.MAVEN_PASSWORD
+					username project.hasProperty('maven_username') ? project.property('maven_username') : ""
+					password project.hasProperty('maven_password') ? project.property('maven_password') : ""
 				}
 			}
 		}
